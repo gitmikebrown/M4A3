@@ -1,32 +1,32 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+
+//ENV
+require('dotenv').config({ path: './config.env' });
+
+
+
 
 //Parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-//routes
+
+//const app = require('./app');  I could not get this to work
 const loanRoute = require('./routes/loanRoute');
 app.use('/loan', loanRoute);
 
-const customerRoute = require('./routes/customerRoute');
-app.use('/customer', customerRoute);
-
-const ledgerRoute = require('./routes/ledgerRoute');
-app.use('/ledger', ledgerRoute);
 
 
+//PORT
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
-
-
 
 
 
 //Connect to DB
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb+srv://mikejbrown:ssOX5PclZpKgf2VE@cluster0.dk5ltnv.mongodb.net/LOANS', {useNewUrlParser: true})
+const MONGO_DATA_BASE = process.env.DATABASE.replace('<password>', process.env.DB_PASSWORD);
+mongoose.connect(MONGO_DATA_BASE, {useNewUrlParser: true})
     .then(() => console.log('connection successfull\n**********************************'))
     .catch((error) => console.error(err));
